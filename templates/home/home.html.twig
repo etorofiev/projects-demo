@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Projects Demo Home{% endblock %}
+
+{% block body %}
+    <h1>Projects Demo Home</h1>
+
+    <a href="{{ path('project_index') }}">Projects</a>
+    <a href="{{ path('task_index') }}">Tasks</a>
+{% endblock %}

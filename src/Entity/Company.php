@@ -34,6 +34,15 @@ class Company
         $this->projects = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        if (!empty($this->name)) {
+            return $this->getName();
+        } else {
+            return 'Unknown company';
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;

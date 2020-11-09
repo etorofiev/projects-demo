@@ -47,6 +47,15 @@ class Task
      */
     private $deleted = false;
 
+    public function __toString()
+    {
+        if (!empty($this->title)) {
+            return $this->getTitle();
+        } else {
+            return 'Unknown task';
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;

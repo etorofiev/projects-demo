@@ -64,6 +64,15 @@ class Project
         $this->tasks = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        if (!empty($this->title)) {
+            return $this->getTitle();
+        } else {
+            return 'Unknown project';
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;

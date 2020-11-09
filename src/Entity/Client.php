@@ -34,6 +34,15 @@ class Client
         $this->projects = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        if (!empty($this->name)) {
+            return $this->getName();
+        } else {
+            return 'Unknown client';
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;

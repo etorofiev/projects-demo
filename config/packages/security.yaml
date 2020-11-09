@@ -1,5 +1,4 @@
 security:
-    enable_authenticator_manager: true
     encoders:
         App\Entity\User:
             algorithm: auto
@@ -14,9 +13,16 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-#        main:
+        main:
 #            anonymous: true
-#            lazy: true
+            lazy: true
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                target: app_login
 #            provider: users_in_memory
 
             # activate different ways to authenticate
