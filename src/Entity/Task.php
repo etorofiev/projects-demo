@@ -42,6 +42,11 @@ class Task
      */
     private $project;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $deleted;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class Task
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }

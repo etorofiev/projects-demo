@@ -54,6 +54,11 @@ class Project
      */
     private $tasks;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $deleted;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -162,6 +167,18 @@ class Project
                 $task->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }
