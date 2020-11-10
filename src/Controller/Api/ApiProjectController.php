@@ -17,6 +17,8 @@ class ApiProjectController extends AbstractController
 {
     use SerializesEntitiesToJson;
 
+    const PAGE_RESULTS = 20;
+
     /**
      * @Route("/", name="api_project_list", format="json", methods={"GET"})
      * @param Request $request
@@ -26,10 +28,15 @@ class ApiProjectController extends AbstractController
     public function index(Request $request, ProjectRepository $projectRepository): JsonResponse
     {
         $page = $request->query->get('page', 1);
-        //$limit = $request->query->get('limit', 1);
 
         try {
             $projects = $projectRepository->findAllPaginated($page);
+            $extraData = [
+                'total' => $projects->count(),
+                'limit' => self::PAGE_RESULTS,
+                'maxPages' => ceil($projects->count() / self::PAGE_RESULTS),
+                'page' => (int) $page
+            ];
         } catch (\Exception $e) {
             return new JsonResponse([
                 'code' => -1,
@@ -37,7 +44,7 @@ class ApiProjectController extends AbstractController
             ]);
         }
 
-        return $this->serializeEntityToJsonResponse($projects);
+        return $this->serializeEntityToJsonResponse($projects, 0, $extraData);
     }
 
     /**

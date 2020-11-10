@@ -15,15 +15,25 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TaskController extends AbstractController
 {
+    const PAGE_RESULTS = 20;
+
     /**
      * @Route("/", name="task_index", methods={"GET"})
+     * @param Request $request
      * @param TaskRepository $taskRepository
      * @return Response
      */
-    public function index(TaskRepository $taskRepository): Response
+    public function index(Request $request, TaskRepository $taskRepository): Response
     {
+        $page = $request->query->get('page', 1);
+        $tasks = $taskRepository->findAllPaginated($page);
+
         return $this->render('task/index.html.twig', [
-            'tasks' => $taskRepository->findAllPaginated(),
+            'total' => $tasks->count(),
+            'limit' => self::PAGE_RESULTS,
+            'maxPages' => ceil($tasks->count() / self::PAGE_RESULTS),
+            'page' => (int) $page,
+            'tasks' => $tasks,
         ]);
     }
 

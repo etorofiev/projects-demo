@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Serializer;
 
 trait SerializesEntitiesToJson
 {
-    public function serializeEntityToJsonResponse($entities, $key = 0, $groups = null)
+    public function serializeEntityToJsonResponse($entities, $key = 0, $extraData = [])
     {
         ////TODO find a way to disable fetching relationships for nested objects
         /// groups unfortunately cannot handle nested descriptions
@@ -51,15 +51,16 @@ trait SerializesEntitiesToJson
             $data[$key] = $entities;
         }
 
+        $contents = array_merge($extraData, [
+            'code' => 0,
+            'data' => $data
+        ]);
+
         return new JsonResponse(
             $serializer->serialize(
-                [
-                    'code' => 0,
-                    'data' => $data
-                ],
+                $contents,
                 'json',
                 [
-                    AbstractObjectNormalizer::GROUPS => $groups,
                     AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                     AbstractObjectNormalizer::IGNORED_ATTRIBUTES => [
                         'deleted',

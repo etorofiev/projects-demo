@@ -44,6 +44,10 @@ class ProjectController extends AbstractController
 
         if ($projectsData['code'] === 0) {
             return $this->render('project/index.html.twig', [
+                'total'  => $projectsData['total'],
+                'limit'  => $projectsData['limit'],
+                'maxPages'  => $projectsData['maxPages'],
+                'page'  => $projectsData['page'],
                 'projects' => $projectsData['data'][0],
             ]);
         } else {

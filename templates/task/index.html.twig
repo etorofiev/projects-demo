@@ -44,4 +44,33 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {% if maxPages > 1 %}
+        <nav aria-label="Tasks navigation">
+            <ul class="pagination">
+                {# `«` arrow  #}
+                <li class="page-item {{ page == 1 ? 'disabled' }}">
+                    <a class="page-link" href="{{ path('task_index', {page: page - 1 < 1 ? 1 : page - 1}) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                {# Render each page number #}
+                {% for i in 1..maxPages %}
+                    {% if (maxPages > 10 and (i <= 3 or i > maxPages - 3)) or maxPages <= 10 %}
+                    <li class="page-item {{ page == i ? 'active' }}">
+                        <a class="page-link" href="{{ path('task_index', {page: i}) }}">{{ i }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                {# `»` arrow #}
+                <li class="page-item {{ page == maxPages ? 'disabled' }}">
+                    <a class="page-link" href="{{ path('task_index', {page: page + 1 <= maxPages ? page + 1 : page}) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
 {% endblock %}

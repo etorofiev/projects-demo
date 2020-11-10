@@ -26,10 +26,15 @@ class ApiTaskController extends AbstractController
     public function index(Request $request, TaskRepository $taskRepository): JsonResponse
     {
         $page = $request->query->get('page', 1);
-        //$limit = $request->query->get('limit', 1);
 
         try {
             $tasks = $taskRepository->findAllPaginated($page);
+            $extraData = [
+                'total' => $tasks->count(),
+                'limit' => $tasks->getIterator()->count(),
+                'maxPages' => ceil($tasks->count() / $tasks->getIterator()->count()),
+                'page' => (int) $page
+            ];
         } catch (\Exception $e) {
             return new JsonResponse([
                 'code' => -1,
@@ -37,7 +42,7 @@ class ApiTaskController extends AbstractController
             ]);
         }
 
-        return $this->serializeEntityToJsonResponse($tasks);
+        return $this->serializeEntityToJsonResponse($tasks, 0 , $extraData);
     }
 
     /**
