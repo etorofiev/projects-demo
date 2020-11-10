@@ -6,6 +6,8 @@ use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
@@ -21,36 +23,55 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(min=3, max=255,
+     *     minMessage="The project title should be at least 3 characters",
+     *     maxMessage="The project title should be at most 255 characters"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=4095, nullable=true)
+     * @Assert\Length(max=4095, allowEmptyString=true,
+     *     maxMessage="The description should be at most 4095 characters"
+     * )
      */
     private $description;
 
     /**
+     * Warning! DO NOT add ChoiceType to the form class, otherwise validating the status will result
+     * in a generic error message "This value is not valid"
+     *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Please provide a valid status - new, pending, failed or done")
+     * @Assert\Choice(choices={"new", "pending", "failed", "done"}, message="Invalid status - the available options are: new, pending, failed or done")
      */
     private $status;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Please provide a duration in minutes")
+     * @Assert\GreaterThanOrEqual(0, message="Please provide a duration in minutes between 0 and 8388607")
+     * @Assert\LessThan(8388607, message="The duration cannot exceed 8388607")
      */
     private $duration;
 
     /**
      * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="projects")
+     * @MaxDepth(1)
      */
     private $company;
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="projects")
+     * @MaxDepth(1)
      */
     private $client;
 
     /**
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="project")
+     * @MaxDepth(1)
      */
     private $tasks;
 

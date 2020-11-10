@@ -14,37 +14,23 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TaskRepository extends ServiceEntityRepository
 {
+    use PaginatesResult;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Task::class);
     }
 
-    // /**
-    //  * @return Task[] Returns an array of Task objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllPaginated($currentPage = 1)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this->createQueryBuilder('tasks')
+            ->where('tasks.deleted = :del')
+            ->setParameter('del', 0)
+            ->orderBy('tasks.id', 'ASC')
+            ->getQuery();
 
-    /*
-    public function findOneBySomeField($value): ?Task
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $paginator = $this->paginate($query, $currentPage);
+
+        return $paginator;
     }
-    */
 }

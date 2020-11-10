@@ -14,37 +14,23 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProjectRepository extends ServiceEntityRepository
 {
+    use PaginatesResult;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Project::class);
     }
 
-    // /**
-    //  * @return Project[] Returns an array of Project objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllPaginated($currentPage = 1)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this->createQueryBuilder('projects')
+            ->where('projects.deleted = :del')
+            ->setParameter('del', 0)
+            ->orderBy('projects.id', 'ASC')
+            ->getQuery();
 
-    /*
-    public function findOneBySomeField($value): ?Project
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $paginator = $this->paginate($query, $currentPage);
+
+        return $paginator;
     }
-    */
 }

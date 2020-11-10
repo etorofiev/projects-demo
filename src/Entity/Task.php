@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
@@ -19,26 +21,41 @@ class Task
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(min=3, max=255,
+     *     minMessage="The task title should be at least 3 characters",
+     *     maxMessage="The task title should be at most 255 characters"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=4095, nullable=true)
+     * @Assert\Length(max=4095, allowEmptyString=true,
+     *     maxMessage="The task description should be at most 4095 characters"
+     * )
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Please provide a valid status - new, pending, failed or done")
+     * @Assert\Choice(choices={"new", "pending", "failed", "done"}, message="Invalid status - the available options are: new, pending, failed or done")
      */
     private $status;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Please provide a duration in minutes")
+     * @Assert\GreaterThanOrEqual(0, message="Please provide a duration in minutes between 0 and 8388607")
+     * @Assert\LessThan(8388607, message="The duration cannot exceed 8388607")
      */
     private $duration;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="tasks")
+     * @MaxDepth(1)
+     * @Assert\NotBlank(message="Please select a project for the task")
      */
     private $project;
 

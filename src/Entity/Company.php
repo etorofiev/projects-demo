@@ -6,6 +6,7 @@ use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
@@ -26,6 +27,7 @@ class Company
 
     /**
      * @ORM\OneToMany(targetEntity=Project::class, mappedBy="company")
+     * @MaxDepth(1)
      */
     private $projects;
 
