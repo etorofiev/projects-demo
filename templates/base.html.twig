@@ -14,7 +14,7 @@
         {% endblock %}
         {% block stylesheets %}
             <style>
-                h1 {
+                h1, h2 {
                     font-size: 1.5rem;
                     padding: 0.5rem 1rem;
                 }
@@ -24,30 +24,50 @@
     <body>
         <div class="container-xl">
             {% block nav %}
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Projects and tasks demo</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-link active" href="{{ path('home_index') }}">Home </a>
-                        <a class="nav-link" href="{{ path('project_index') }}">Projects</a>
-                        <a class="nav-link" href="{{ path('task_index') }}">Tasks</a>
-                        <a class="nav-link float-right" href="{{ path('app_logout') }}">Log out</a>
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="#">Projects and tasks demo</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link active" href="{{ path('home_index') }}">Home </a>
+                            <a class="nav-link" href="{{ path('project_index') }}">Projects</a>
+                            <a class="nav-link" href="{{ path('task_index') }}">Tasks</a>
+                            <a class="nav-link float-right" href="{{ path('app_logout') }}">Log out</a>
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+                {# <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
                 {% if app.user %}
                     <div class="mb-3">
                         You are logged in as {{ app.user.username }}
                     </div>
                 {% endif %}
-                {% if error is defined and error is not empty %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% for message in app.flashes('danger') %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+                {% if clientErrors is defined and clientErrors is not empty %}
+                    {% for clientError in clientErrors %}
+                        <div class="alert alert-danger">{{ clientError }}</div>
+                    {% endfor %}
                 {% endif %}
 
             {% endblock %}
+
             {% block body %}{% endblock %}
         </div>
         {% block javascripts %}

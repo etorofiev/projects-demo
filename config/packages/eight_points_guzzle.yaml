@@ -1,11 +1,14 @@
 # EightPoints GuzzleBundle
 # A full list of configuration options can be found here:
 # https://github.com/8p/EightPointsGuzzleBundle/blob/master/src/Resources/doc/configuration-reference.md
+parameters:
+    env(LOCAL_API_URL): ''
+
 eight_points_guzzle:
     clients:
-        my_client:
+        local_api:
             # Write here the host where to do requests
-            # base_url: "http://target.url"
+            base_url: '%env(string:LOCAL_API_URL)%'
 
             # Request options: http://docs.guzzlephp.org/en/stable/request-options.html
             options:
@@ -13,12 +16,14 @@ eight_points_guzzle:
                 timeout: 30
 
                 # set to false to disable throwing exceptions on an HTTP protocol errors (4xx and 5xx responses)
-                http_errors: true
+                http_errors: false
 
                 # each key is the name of a header, and each value is a string or array of strings representing the
                 # header field values.
                 headers:
                     User-Agent: "EightPointsGuzzleBundle/v7"
+                    Content-Type: "application/json"
+                    Accept: "application/json"
 
             # Find plugins here:
             # https://github.com/8p/EightPointsGuzzleBundle#known-and-supported-plugins

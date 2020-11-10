@@ -28,6 +28,7 @@
                     {% if task.project is not empty %}
                         <a href="{{ path('project_show', {'id': task.project.id}) }}">{{ task.project.description }}</a>
                     {% endif %}
+                </td>
                 <td>{{ task.description }}</td>
                 <td>{{ task.status }}</td>
                 <td>{{ task.duration }}</td>

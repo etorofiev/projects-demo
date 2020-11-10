@@ -100,10 +100,7 @@
             "branch": "master",
             "version": "7.0",
             "ref": "7babb21a3928e44e485391907e3abc346804e0d2"
-        },
-        "files": [
-            "config/packages/eight_points_guzzle.yaml"
-        ]
+        }
     },
     "fzaninotto/faker": {
         "version": "v1.9.1"

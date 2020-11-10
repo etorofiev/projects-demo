@@ -33,10 +33,44 @@
             </tr>
         </tbody>
     </table>
+
     <div>
         <a class="btn btn-primary" href="{{ path('project_index') }}"><i data-feather="chevrons-left"></i> Back to list</a>
         <a class="btn btn-warning" href="{{ path('project_edit', {'id': project.id}) }}"><i data-feather="edit-3"></i> Edit</a>
     </div>
     <hr/>
     {{ include('project/_delete_form.html.twig') }}
+    <hr/>
+
+    <h2>Project tasks</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Duration</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in project.tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.status }}</td>
+                <td>{{ task.duration }}</td>
+                <td>
+                    <a class="btn btn-primary btn-small btn-block" href="{{ path('task_show', {'id': task.id}) }}">View</a>
+                    <a class="btn btn-warning btn-small btn-block" href="{{ path('task_edit', {'id': task.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
