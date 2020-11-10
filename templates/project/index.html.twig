@@ -5,15 +5,19 @@
 {% block body %}
     <h1>Project index</h1>
 
+    <a class="btn btn-success float-right" href="{{ path('project_new') }}"><i data-feather="plus-circle"></i> Add</a>
+
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Title</th>
+                <th>Company</th>
+                <th>Client</th>
                 <th>Description</th>
                 <th>Status</th>
                 <th>Duration</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,21 +25,21 @@
             <tr>
                 <td>{{ project.id }}</td>
                 <td>{{ project.title }}</td>
+                <td>{{ project.company ? project.company.name : '' }}</td>
+                <td>{{ project.client ? project.client.name : '' }}</td>
                 <td>{{ project.description }}</td>
                 <td>{{ project.status }}</td>
                 <td>{{ project.duration }}</td>
                 <td>
-                    <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
-                    <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+                    <a class="btn btn-primary btn-small btn-block" href="{{ path('project_show', {'id': project.id}) }}">View</a>
+                    <a class="btn btn-warning btn-small btn-block" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('project_new') }}">Create new</a>
 {% endblock %}

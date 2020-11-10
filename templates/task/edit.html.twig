@@ -5,9 +5,9 @@
 {% block body %}
     <h1>Edit Task</h1>
 
-    {{ include('task/_form.html.twig', {'button_label': 'Update'}) }}
+    <a class="btn btn-primary" href="{{ path('task_index') }}"><i data-feather="chevrons-left"></i> Back to list</a>
 
-    <a href="{{ path('task_index') }}">back to list</a>
+    {{ include('task/_form.html.twig', {'button_label': 'Update'}) }}
 
     {{ include('task/_delete_form.html.twig') }}
 {% endblock %}

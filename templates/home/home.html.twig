@@ -3,8 +3,21 @@
 {% block title %}Projects Demo Home{% endblock %}
 
 {% block body %}
-    <h1>Projects Demo Home</h1>
-
-    <a href="{{ path('project_index') }}">Projects</a>
-    <a href="{{ path('task_index') }}">Tasks</a>
+    <h1>Home</h1>
+    <hr/>
+    <div class="media">
+        <i data-feather="briefcase" class="mr-3"></i>
+        <div class="media-body">
+            <h5 class="mt-0"><a href="{{ path('project_index') }}">Projects</a></h5>
+            Here you can view, list, create, update and delete projects, and assign them to different clients and companies.
+        </div>
+    </div>
+    <hr/>
+    <div class="media">
+        <i data-feather="check-circle" class="mr-3"></i>
+        <div class="media-body">
+            <h5 class="mt-0"><a href="{{ path('task_index') }}">Tasks</a></h5>
+            Here you can view, list, create, update and delete project tasks.
+        </div>
+    </div>
 {% endblock %}

@@ -8,16 +8,20 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ project.id }}</td>
-            </tr>
-            <tr>
                 <th>Title</th>
                 <td>{{ project.title }}</td>
             </tr>
             <tr>
                 <th>Description</th>
                 <td>{{ project.description }}</td>
+            </tr>
+            <tr>
+                <th>Client</th>
+                <td>{{ project.client ? project.client.name : '' }}</td>
+            </tr>
+            <tr>
+                <th>Company</th>
+                <td>{{ project.company ? project.company.name : '' }}</td>
             </tr>
             <tr>
                 <th>Status</th>
@@ -29,10 +33,10 @@
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('project_index') }}">back to list</a>
-
-    <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
-
+    <div>
+        <a class="btn btn-primary" href="{{ path('project_index') }}"><i data-feather="chevrons-left"></i> Back to list</a>
+        <a class="btn btn-warning" href="{{ path('project_edit', {'id': project.id}) }}"><i data-feather="edit-3"></i> Edit</a>
+    </div>
+    <hr/>
     {{ include('project/_delete_form.html.twig') }}
 {% endblock %}

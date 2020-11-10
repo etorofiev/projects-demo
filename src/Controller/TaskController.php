@@ -17,16 +17,20 @@ class TaskController extends AbstractController
 {
     /**
      * @Route("/", name="task_index", methods={"GET"})
+     * @param TaskRepository $taskRepository
+     * @return Response
      */
     public function index(TaskRepository $taskRepository): Response
     {
         return $this->render('task/index.html.twig', [
-            'tasks' => $taskRepository->findAll(),
+            'tasks' => $taskRepository->findAllPaginated(),
         ]);
     }
 
     /**
      * @Route("/new", name="task_new", methods={"GET","POST"})
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -50,6 +54,8 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/{id}", name="task_show", methods={"GET"})
+     * @param Task $task
+     * @return Response
      */
     public function show(Task $task): Response
     {
@@ -60,6 +66,9 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="task_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Task $task
+     * @return Response
      */
     public function edit(Request $request, Task $task): Response
     {
@@ -80,6 +89,9 @@ class TaskController extends AbstractController
 
     /**
      * @Route("/{id}", name="task_delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Task $task
+     * @return Response
      */
     public function delete(Request $request, Task $task): Response
     {

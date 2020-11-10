@@ -12,12 +12,49 @@
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         {% endblock %}
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <style>
+                h1 {
+                    font-size: 1.5rem;
+                    padding: 0.5rem 1rem;
+                }
+            </style>
+        {% endblock %}
     </head>
     <body>
         <div class="container-xl">
+            {% block nav %}
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Projects and tasks demo</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link active" href="{{ path('home_index') }}">Home </a>
+                        <a class="nav-link" href="{{ path('project_index') }}">Projects</a>
+                        <a class="nav-link" href="{{ path('task_index') }}">Tasks</a>
+                        <a class="nav-link float-right" href="{{ path('app_logout') }}">Log out</a>
+                    </div>
+                </div>
+            </nav>
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.username }}
+                    </div>
+                {% endif %}
+                {% if error is defined and error is not empty %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+            {% endblock %}
             {% block body %}{% endblock %}
         </div>
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+            <script>
+                feather.replace()
+            </script>
+        {% endblock %}
     </body>
 </html>

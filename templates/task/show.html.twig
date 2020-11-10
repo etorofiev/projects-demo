@@ -8,16 +8,16 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ task.id }}</td>
-            </tr>
-            <tr>
                 <th>Title</th>
                 <td>{{ task.title }}</td>
             </tr>
             <tr>
                 <th>Description</th>
                 <td>{{ task.description }}</td>
+            </tr>
+            <tr>
+                <th>Project</th>
+                <td>{{ task.project.title }}</td>
             </tr>
             <tr>
                 <th>Status</th>
@@ -29,10 +29,10 @@
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('task_index') }}">back to list</a>
-
-    <a href="{{ path('task_edit', {'id': task.id}) }}">edit</a>
-
+    <div>
+        <a class="btn btn-primary" href="{{ path('task_index') }}"><i data-feather="chevrons-left"></i> Back to list</a>
+        <a class="btn btn-warning" href="{{ path('task_edit', {'id': task.id}) }}"><i data-feather="edit-3"></i> Edit</a>
+    </div>
+    <hr/>
     {{ include('task/_delete_form.html.twig') }}
 {% endblock %}

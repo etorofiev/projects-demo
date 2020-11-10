@@ -5,15 +5,18 @@
 {% block body %}
     <h1>Task index</h1>
 
+    <a class="btn btn-success float-right" href="{{ path('task_new') }}"><i data-feather="plus-circle"></i> Add</a>
+
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Title</th>
+                <th>Project</th>
                 <th>Description</th>
                 <th>Status</th>
                 <th>Duration</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,21 +24,23 @@
             <tr>
                 <td>{{ task.id }}</td>
                 <td>{{ task.title }}</td>
+                <td>
+                    {% if task.project is not empty %}
+                        <a href="{{ path('project_show', {'id': task.project.id}) }}">{{ task.project.description }}</a>
+                    {% endif %}
                 <td>{{ task.description }}</td>
                 <td>{{ task.status }}</td>
                 <td>{{ task.duration }}</td>
                 <td>
-                    <a href="{{ path('task_show', {'id': task.id}) }}">show</a>
-                    <a href="{{ path('task_edit', {'id': task.id}) }}">edit</a>
+                    <a class="btn btn-primary btn-small btn-block" href="{{ path('task_show', {'id': task.id}) }}">View</a>
+                    <a class="btn btn-warning btn-small btn-block" href="{{ path('task_edit', {'id': task.id}) }}">Edit</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('task_new') }}">Create new</a>
 {% endblock %}
