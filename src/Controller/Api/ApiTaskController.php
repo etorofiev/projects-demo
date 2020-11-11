@@ -3,9 +3,13 @@
 namespace App\Controller\Api;
 
 use App\Entity\Task;
+use App\Event\TaskCreatedEvent;
+use App\Event\TaskDeletedEvent;
+use App\Event\TaskUpdatedEvent;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -68,9 +72,10 @@ class ApiTaskController extends AbstractController
     /**
      * @Route("/", name="api_task_create", format="json", methods={"POST"})
      * @param Request $request
+     * @param EventDispatcherInterface $dispatcher
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public function create(Request $request, EventDispatcherInterface $dispatcher): JsonResponse
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task, ['csrf_protection' => false]);
@@ -80,6 +85,9 @@ class ApiTaskController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($task);
             $entityManager->flush();
+
+            $event = new TaskCreatedEvent($task);
+            $dispatcher->dispatch($event, TaskCreatedEvent::NAME);
 
             return $this->serializeEntityToJsonResponse($task, 'task');
         } else {
@@ -95,9 +103,15 @@ class ApiTaskController extends AbstractController
      * @param int $id
      * @param Request $request
      * @param TaskRepository $taskRepository
+     * @param EventDispatcherInterface $dispatcher
      * @return JsonResponse
      */
-    public function update(int $id, Request $request, TaskRepository $taskRepository): JsonResponse
+    public function update(
+        int $id,
+        Request $request,
+        TaskRepository $taskRepository,
+        EventDispatcherInterface $dispatcher
+    ): JsonResponse
     {
         $task = $taskRepository->findOneBy(['id' => $id, 'deleted' => false]);
 
@@ -118,6 +132,9 @@ class ApiTaskController extends AbstractController
             $entityManager->persist($task);
             $entityManager->flush();
 
+            $event = new TaskUpdatedEvent($task);
+            $dispatcher->dispatch($event, TaskUpdatedEvent::NAME);
+
             return $this->serializeEntityToJsonResponse($task, 'task');
         } else {
             return new JsonResponse([
@@ -131,9 +148,10 @@ class ApiTaskController extends AbstractController
      * @Route("/{id}", name="api_task_delete", format="json", methods={"DELETE"}, requirements={"id"="\d+"})
      * @param int $id
      * @param TaskRepository $taskRepository
+     * @param EventDispatcherInterface $dispatcher
      * @return JsonResponse
      */
-    public function delete(int $id, TaskRepository $taskRepository): JsonResponse
+    public function delete(int $id, TaskRepository $taskRepository, EventDispatcherInterface $dispatcher): JsonResponse
     {
         $task = $taskRepository->findOneBy(['id' => $id, 'deleted' => false]);
 
@@ -147,6 +165,9 @@ class ApiTaskController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($task);
             $entityManager->flush();
+
+            $event = new TaskDeletedEvent($task);
+            $dispatcher->dispatch($event, TaskDeletedEvent::NAME);
 
             return new JsonResponse([
                 'code' => 0,
